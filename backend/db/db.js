@@ -1,22 +1,17 @@
 const mariadb = require("mariadb");
+const { Sequelize } = require('sequelize');
 require('dotenv').config()
-const pool = mariadb.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  connectionLimit: 5,
+
+// Option 3: Passing parameters separately (other dialects)
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: 'localhost',
+  dialect: 'mariadb'
 });
 
-const connect = async() => {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-  } finally {
-    if (conn) {
-      conn.release(); //release to pool
-    }
-  }
+sequelize.authenticate().then(() => {
+  console.log('Connection has been established successfully.');
+}).catch((error) => {
+  console.error('Unable to connect to the database: ', error);
+});
 
-  return conn;
-}
+module.exports = { sequelize };
