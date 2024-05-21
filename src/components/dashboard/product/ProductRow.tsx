@@ -1,7 +1,6 @@
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { ProductInterface } from "../../../interfaces/product.interface.ts";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./product.css";
 import {DatabaseService} from "../../../services/database.service.ts";
@@ -20,7 +19,7 @@ function ProductRow({ product, editCallback, deleteCallback }: ProductRowProps) 
   }
 
   return (
-    <TableRow
+    <TableRow onClick={() => editCallback(product)}
       key={product.id}
       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
     >
@@ -30,11 +29,6 @@ function ProductRow({ product, editCallback, deleteCallback }: ProductRowProps) 
       <TableCell align="center">{product.price}</TableCell>
       <TableCell align="center">
         {getCurrentQuantity()}
-      </TableCell>
-      <TableCell align="center">
-        <div onClick={() => editCallback(product)}>
-          <EditIcon className="editIcon"></EditIcon>
-        </div>
       </TableCell>
       <TableCell align="center">
         <div onClick={deleteCallback}>

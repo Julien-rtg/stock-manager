@@ -66,7 +66,6 @@ function ProductList() {
               <TableCell align="center">Name</TableCell>
               <TableCell align="center">Price</TableCell>
               <TableCell align="center">Stock quantity</TableCell>
-              <TableCell align="center">Edit</TableCell>
               <TableCell align="center">Delete</TableCell>
             </TableRow>
           </TableHead>

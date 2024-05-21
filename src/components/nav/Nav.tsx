@@ -58,7 +58,7 @@ function Nav({ template }: { template: ReactElement }) {
               <ListItemIcon>
                 {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
               </ListItemIcon>
-              <ListItemText primary={"Movement List"} />
+              <ListItemText primary={"Movement"} />
             </ListItemButton>
           </ListItem>
         </List>
@@ -68,7 +68,7 @@ function Nav({ template }: { template: ReactElement }) {
               <ListItemIcon>
                 {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
               </ListItemIcon>
-              <ListItemText primary={"Product List"} />
+              <ListItemText primary={"Inventory"} />
             </ListItemButton>
           </ListItem>
         </List>
@@ -78,7 +78,7 @@ function Nav({ template }: { template: ReactElement }) {
               <ListItemIcon>
                 {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
               </ListItemIcon>
-              <ListItemText primary={"Order List"} />
+              <ListItemText primary={"Order"} />
             </ListItemButton>
           </ListItem>
         </List>

@@ -25,6 +25,7 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
   const databaseService = new DatabaseService();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
   const [products, setProducts] = useState<ProductInterface[]>([]);
   const [open, setOpen] = React.useState(false);
 
@@ -40,6 +41,10 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(event.target.value);
+  };
+  
+  const handleStockChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStock(event.target.value);
   };
 
   const onConfirm = () => {
@@ -127,6 +132,17 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
               onChange={handlePriceChange}
             />
           </FormControl>
+
+          <FormControl fullWidth margin="dense">
+            <InputLabel htmlFor="stock">Stock</InputLabel>
+            <Input
+              id="stock"
+              type="text"
+              value={stock}
+              onChange={handleStockChange}
+            />
+          </FormControl>
+
           <Button onClick={onConfirm} variant="contained" color="success">
             Validate
           </Button>
