@@ -1,11 +1,26 @@
-const e = require('express');
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db/db').sequelize;
+const db = require('../db/db');
 
-const User = sequelize.define('user', {
-  username: DataTypes.TEXT,
-  password: DataTypes.TEXT,
-  email: DataTypes.TEXT
-});
+class User {
+    
+  constructor() {
+    this.sequelize = db.getConnection();
+  }
+  
+  async createUser () {
+    (await this.sequelize).define('user', {
+      username: DataTypes.TEXT,
+      password: DataTypes.TEXT,
+      email: DataTypes.TEXT
+    });
+  }
 
-module.exports = User;
+  async syncDb () {
+    await this.createUser();
+    (await this.sequelize).sync({ force: true });
+  }
+}
+
+const user = new User();
+
+module.exports = user;
