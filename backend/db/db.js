@@ -1,6 +1,6 @@
 const mariadb = require("mariadb");
 const { Sequelize } = require('sequelize');
-require('dotenv').config()
+require('dotenv').config();
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
