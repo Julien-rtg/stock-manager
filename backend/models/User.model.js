@@ -8,11 +8,12 @@ class User {
   }
   
   async createUser () {
-    (await this.sequelize).define('user', {
+    const UserInstance = (await this.sequelize).define('user', {
       username: DataTypes.TEXT,
       password: DataTypes.TEXT,
       email: DataTypes.TEXT
     });
+    return UserInstance;
   }
 
   async syncDb () {
