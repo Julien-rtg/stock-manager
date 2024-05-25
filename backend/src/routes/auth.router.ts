@@ -1,9 +1,8 @@
 import express from "express";
-import { AuthController } from "../controllers/auth.controller";
-import { AuthMiddleware } from "../middlewares/auth.middleware";
+import { AuthController } from "../controllers/auth.controller.ts";
+import { AuthMiddleware } from "../middlewares/auth.middleware.ts";
 
 export class AuthRouter {
-  
   private router: express.Router = express.Router();
   private authController: AuthController = new AuthController();
   private authMiddleware: AuthMiddleware = new AuthMiddleware();
@@ -28,13 +27,13 @@ export class AuthRouter {
 
     // User registration
     this.router.post("/register", async (req, res) => {
-      const {message, code} = await this.authController.register(req);
+      const { message, code } = await this.authController.register(req);
       res.status(code).json({ message: message });
     });
 
     // // User login
     this.router.post("/login", async (req, res) => {
-      const {message, code} = await this.authController.login(req);
+      const { message, code } = await this.authController.login(req);
       res.status(code).json({ message: message });
     });
   }

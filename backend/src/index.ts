@@ -1,5 +1,5 @@
 import express from "express";
-import { AuthRouter } from "./routes/auth.router";
+import { AuthRouter } from "./routes/auth.router.ts";
 
 const app = express();
 const port = 3000;

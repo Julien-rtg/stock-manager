@@ -1,35 +1,30 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User.model";
+import { User } from "../models/User.model.ts";
 import { Request } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
 export class AuthController {
-  private userModel: User = new User();
-  private user: Promise<any> = this.userModel.createUser();
-
   public async register(req: Request) {
     try {
-      const { username, password } = req.body;
+      const { username, password, email } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new (await this.user)({
-        username,
+      await User.create({
+        username: username,
+        email: email,
         password: hashedPassword,
       });
-      await user.save();
       return { message: "User registered successfully", code: 201 };
     } catch (error) {
-      return { message: "Registration failed", code: 500 };
+      return { message: error, code: 500 };
     }
   }
 
   public async login(req: Request) {
     try {
       const { username, password } = req.body;
-      const user = await (
-        await this.user
-      ).findOne({ where: { username: username } });
+      const user: any = await User.findOne({ where: { username: username } });
       if (!user) {
         return { message: "Authentication failed", code: 401 };
       }
