@@ -1,11 +1,10 @@
 import express from "express";
 import { AuthController } from "../controllers/auth.controller.ts";
-import { AuthMiddleware } from "../middlewares/auth.middleware.ts";
+import { isAuthorized } from "../middlewares/auth.middleware.ts";
 
 export class AuthRouter {
   private router: express.Router = express.Router();
   private authController: AuthController = new AuthController();
-  private authMiddleware: AuthMiddleware = new AuthMiddleware();
   constructor() {
     this.init();
   }
@@ -20,9 +19,8 @@ export class AuthRouter {
     });
 
     // define the home page route
-    this.router.get("/", async (req, res) => {
-      const { message, code } = await this.authMiddleware.verifyToken(req);
-      res.status(code).json({ message: message });
+    this.router.get("/", isAuthorized, async (req, res) => {
+      res.json({ message: "Welcome to the auth page" });
     });
 
     // User registration
