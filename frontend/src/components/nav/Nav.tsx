@@ -10,9 +10,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import {ReactElement} from "react";
+import { ReactElement } from "react";
 
-function Nav({ template }: { template: ReactElement }) {
+export const Nav = ({ template }: { template: ReactElement }) => {
   const drawerWidth = 240;
 
   return (
@@ -94,5 +94,3 @@ function Nav({ template }: { template: ReactElement }) {
     </Box>
   );
 }
-
-export default Nav;
