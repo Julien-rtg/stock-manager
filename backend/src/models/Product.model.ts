@@ -9,12 +9,12 @@ class Product extends Model {
 
 Product.init(
   {
-    name: { type: DataTypes.INTEGER, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false },
     price: { type: DataTypes.INTEGER, allowNull: false }
   },
   { sequelize, modelName: "product", timestamps: true }
 );
 
-await Product.sync({ force: true });
+await Product.sync();
 
 export { Product };

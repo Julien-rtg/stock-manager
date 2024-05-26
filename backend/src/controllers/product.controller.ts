@@ -5,6 +5,7 @@ export class ProductController {
   public async createProduct(req: any) {
     try {
       const { name, price } = req.body;
+      console.log(req.body);
       await Product.create({
         name: name,
         price: price,

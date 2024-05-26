@@ -22,7 +22,7 @@ export class ProductRouter {
     this.router.get("/", isAuthorized ,async (req, res) => {
     });
 
-    this.router.post("/create", isAuthorized, async (req, res) => {
+    this.router.post("/", isAuthorized, async (req, res) => {
       const { message, code } = await this.productController.createProduct(req);
       res.status(code).json({ message: message });
     });
