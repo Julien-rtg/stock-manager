@@ -3,7 +3,10 @@ interface ProductSearchInputProps {
   placeholder: string;
 }
 
-export const ProductSearchInput = ({setSearch, placeholder}: ProductSearchInputProps) => {
+export const ProductSearchInput = ({
+  setSearch,
+  placeholder,
+}: ProductSearchInputProps) => {
   return (
     <input
       type="text"

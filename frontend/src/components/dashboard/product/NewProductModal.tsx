@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../interfaces/product.interface.ts";
 import { InputLabel } from "@mui/material";
 import { DatabaseService } from "../../../services/database.service.ts";
-import {PageService} from "../../../services/page.service.ts";
+import { PageService } from "../../../services/page.service.ts";
 
 const style = {
   position: "absolute",
@@ -21,7 +21,15 @@ const style = {
   p: 4,
 };
 
-export default function NewProductModal({callback, openEdit, product}: { callback: () => void, openEdit: boolean, product?: ProductInterface}) {
+export const NewProductModal = ({
+  callback,
+  openEdit,
+  product,
+}: {
+  callback: () => void;
+  openEdit: boolean;
+  product?: ProductInterface;
+}) => {
   const databaseService = new DatabaseService();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -29,11 +37,11 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
   const [products, setProducts] = useState<ProductInterface[]>([]);
   const [open, setOpen] = React.useState(false);
 
-  const switchModal = () => setOpen(!open)
+  const switchModal = () => setOpen(!open);
   const resetModal = () => {
     setName("");
     setPrice("");
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -42,7 +50,7 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(event.target.value);
   };
-  
+
   const handleStockChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStock(event.target.value);
   };
@@ -62,16 +70,16 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
       const entry: ProductInterface = {
         id: product.id,
         name: name,
-        price: parseInt(price)
-      }
+        price: parseInt(price),
+      };
       databaseService.editProduct(entry);
       PageService.flashSuccessMessage("Product edited successfully");
     } else {
       const entry: ProductInterface = {
         id: products.slice(-1)[0].id + 1,
         name: name,
-        price: parseInt(price)
-      }
+        price: parseInt(price),
+      };
       databaseService.pushProduct(entry);
       PageService.flashSuccessMessage("Product added successfully");
     }
@@ -85,18 +93,18 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
 
   useEffect(() => {
     setProducts(databaseService.db.products);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (openEdit) {
       switchModal();
     }
-    if(product){
+    if (product) {
       setName(product.name);
       setPrice(product.price.toString());
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openEdit]);
 
   return (
@@ -112,15 +120,9 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-
           <FormControl fullWidth>
-          <InputLabel htmlFor="price">Name</InputLabel>
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              onChange={handleChange}
-            />
+            <InputLabel htmlFor="price">Name</InputLabel>
+            <Input id="name" type="text" value={name} onChange={handleChange} />
           </FormControl>
 
           <FormControl fullWidth margin="dense">
@@ -150,4 +152,4 @@ export default function NewProductModal({callback, openEdit, product}: { callbac
       </Modal>
     </div>
   );
-}
+};

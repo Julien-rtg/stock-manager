@@ -1,4 +1,4 @@
-import ProductRow from "./ProductRow.tsx";
+import { ProductRow } from "./ProductRow.tsx";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -9,21 +9,24 @@ import TableBody from "@mui/material/TableBody";
 import { ProductInterface } from "../../../interfaces/product.interface.ts";
 import { useEffect, useState } from "react";
 import { DatabaseService } from "../../../services/database.service.ts";
-import NewProductModal from "./NewProductModal.tsx";
-import {PageService} from "../../../services/page.service.ts";
-import {ProductSearchInput} from "./ProductSearchInput.tsx";
+import { NewProductModal } from "./NewProductModal.tsx";
+import { PageService } from "../../../services/page.service.ts";
+import { ProductSearchInput } from "./ProductSearchInput.tsx";
+import { ProductService } from "../../../services/api/product.service.ts";
 
-function ProductList() {
+export const ProductList = () => {
+  const [untouchedProducts, setUntouchedProducts] = useState<ProductInterface[]>([]);
   const [products, setProducts] = useState<ProductInterface[]>([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [editProduct, setEditProduct] = useState<ProductInterface>();
   const [searchName, setSearchName] = useState<string>("");
   const [searchPrice, setSearchPrice] = useState<string>("");
+  const productService = new ProductService();
 
   const editCallback = (product: ProductInterface) => {
     setOpenEdit(true);
     setEditProduct(product);
-  }
+  };
 
   useEffect(() => {
     if (openEdit) {
@@ -36,28 +39,51 @@ function ProductList() {
     databaseService.deleteProduct(productId);
     PageService.flashSuccessMessage("Product deleted successfully");
     setProducts(databaseService.getNotDeletedProducts());
-  }
+  };
 
-  const setProductsHandler = () => {
-    const databaseService = new DatabaseService();
-    setProducts(databaseService.getNotDeletedProducts());
+  const setProductsHandler = async () => {
+    const data = await productService.getAll();
+    setProducts(data);
+    setUntouchedProducts(data);
   };
 
   const applyFilters = () => {
-    setProductsHandler();
-    setProducts((prevProducts) => prevProducts.filter((product: ProductInterface) => product.name.toLowerCase().includes(searchName.toLowerCase())));
-    setProducts((prevProducts) => prevProducts.filter((product: ProductInterface) => product.price.toString().includes(searchPrice)));
-  }
+    setProducts(untouchedProducts);
+    setProducts((prevProducts) =>
+      prevProducts.filter((product: ProductInterface) =>
+        product.name.toLowerCase().includes(searchName.toLowerCase())
+      )
+    );
+    setProducts((prevProducts) =>
+      prevProducts.filter((product: ProductInterface) =>
+        product.price.toString().includes(searchPrice)
+      )
+    );
+  };
 
   useEffect(() => {
     applyFilters();
   }, [searchName, searchPrice]);
 
+  useEffect(() => {
+    setProductsHandler();
+  }, []);
+
   return (
     <div>
-      <NewProductModal callback={setProductsHandler} openEdit={openEdit} product={editProduct}></NewProductModal>
-      <ProductSearchInput setSearch={setSearchName} placeholder={"Search name"} />
-      <ProductSearchInput setSearch={setSearchPrice} placeholder={"Search price"} />
+      <NewProductModal
+        callback={setProductsHandler}
+        openEdit={openEdit}
+        product={editProduct}
+      ></NewProductModal>
+      <ProductSearchInput
+        setSearch={setSearchName}
+        placeholder={"Search name"}
+      />
+      <ProductSearchInput
+        setSearch={setSearchPrice}
+        placeholder={"Search price"}
+      />
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -71,13 +97,16 @@ function ProductList() {
           </TableHead>
           <TableBody>
             {products.map((product: ProductInterface) => (
-              <ProductRow key={product.id} product={product} editCallback={() => editCallback(product)} deleteCallback={() => deleteCallback(product.id)} />
+              <ProductRow
+                key={product.id}
+                product={product}
+                editCallback={() => editCallback(product)}
+                deleteCallback={() => deleteCallback(product.id)}
+              />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
     </div>
   );
-}
-
-export default ProductList;
+};
