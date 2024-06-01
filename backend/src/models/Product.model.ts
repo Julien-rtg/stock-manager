@@ -5,16 +5,16 @@ class Product extends Model {
   declare public id: number;
   declare public name: string;
   declare public price: number;
+  declare public description: string;
 }
 
 Product.init(
   {
     name: { type: DataTypes.STRING, allowNull: false },
-    price: { type: DataTypes.INTEGER, allowNull: false }
+    price: { type: DataTypes.INTEGER, allowNull: false },
+    description: { type: DataTypes.TEXT, allowNull: true, defaultValue: "" }
   },
   { sequelize, modelName: "product", timestamps: true }
 );
-
-await Product.sync();
 
 export { Product };

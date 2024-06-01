@@ -2,12 +2,12 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { FormControl, Input } from "@mui/material";
+import { FormControl, Input, TextareaAutosize } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../interfaces/product.interface.ts";
 import { InputLabel } from "@mui/material";
-import { DatabaseService } from "../../../services/database.service.ts";
 import { PageService } from "../../../services/page.service.ts";
+import { ProductService } from "../../../services/api/product.service.ts";
 
 const style = {
   position: "absolute",
@@ -30,32 +30,41 @@ export const NewProductModal = ({
   openEdit: boolean;
   product?: ProductInterface;
 }) => {
-  const databaseService = new DatabaseService();
+  const productService = new ProductService();
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [products, setProducts] = useState<ProductInterface[]>([]);
   const [open, setOpen] = React.useState(false);
 
   const switchModal = () => setOpen(!open);
   const resetModal = () => {
     setName("");
     setPrice("");
+    setStock("");
+    setDescription("");
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    switch (event.target.id) {
+      case "name":
+        setName(event.target.value);
+        break;
+      case "price":
+        setPrice(event.target.value);
+        break;
+      case "stock":
+        setStock(event.target.value);
+        break;
+      case "description":
+        setDescription(event.target.value);
+        break;
+      default:
+        break;
+    }
   };
 
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice(event.target.value);
-  };
-
-  const handleStockChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStock(event.target.value);
-  };
-
-  const onConfirm = () => {
+  const onConfirm = async () => {
     if (isNaN(parseInt(price))) {
       PageService.flashErrorMessage("Price must be a number");
       return;
@@ -71,30 +80,25 @@ export const NewProductModal = ({
         id: product.id,
         name: name,
         price: parseInt(price),
+        description: description,
       };
-      databaseService.editProduct(entry);
+      console.log(entry);
       PageService.flashSuccessMessage("Product edited successfully");
     } else {
       const entry: ProductInterface = {
-        id: products.slice(-1)[0].id + 1,
         name: name,
         price: parseInt(price),
+        quantity: parseInt(stock),
+        description: description,
       };
-      databaseService.pushProduct(entry);
+      await productService.create(entry);
       PageService.flashSuccessMessage("Product added successfully");
     }
-
-    setProducts(databaseService.db.products);
 
     callback();
     switchModal();
     resetModal();
   };
-
-  useEffect(() => {
-    setProducts(databaseService.db.products);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (openEdit) {
@@ -131,7 +135,7 @@ export const NewProductModal = ({
               id="price"
               type="text"
               value={price}
-              onChange={handlePriceChange}
+              onChange={handleChange}
             />
           </FormControl>
 
@@ -141,7 +145,16 @@ export const NewProductModal = ({
               id="stock"
               type="text"
               value={stock}
-              onChange={handleStockChange}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl fullWidth margin="dense">
+            <TextareaAutosize
+              id="description"
+              value={description}
+              onChange={handleChange}
+              minRows={3}
+              placeholder="Informations complémentaires"
             />
           </FormControl>
 

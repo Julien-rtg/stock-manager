@@ -29,11 +29,21 @@ export class ProductService {
     const response = await fetch(environment.baseUrl + "products", {
       method: "POST",
       headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTY3NDIwMDV9.D-s80VpPpj7r4KOCd4RMwFPWXDioOMd9yNf0gDTaQVU",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      if (response.status === 401) {
+        throw new Error("Unauthorized");
+      }
+      throw new Error("An error occurred");
     });
-    return response.json();
+    return response.products;
   }
 
   async update(id: number, data: ProductInterface) {
@@ -41,10 +51,20 @@ export class ProductService {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTY3NDIwMDV9.D-s80VpPpj7r4KOCd4RMwFPWXDioOMd9yNf0gDTaQVU",
       },
       body: JSON.stringify(data),
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      if (response.status === 401) {
+        throw new Error("Unauthorized");
+      }
+      throw new Error("An error occurred");
     });
-    return response.json();
+    console.log(response, 'response');
   }
 
   async delete(id: number) {

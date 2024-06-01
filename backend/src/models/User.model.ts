@@ -22,6 +22,4 @@ User.init(
   { sequelize, modelName: "user", timestamps: true }
 );
 
-await User.sync();
-
 export { User };

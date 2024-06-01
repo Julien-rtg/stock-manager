@@ -1,4 +1,5 @@
-import { Product } from "../models/Product.model.ts";
+import { Product } from "../models/index.ts";
+import { StockChange } from "../models/index.ts";
 
 export class ProductController {
 
@@ -13,13 +14,22 @@ export class ProductController {
 
   public async createProduct(req: any) {
     try {
-      const { name, price } = req.body;
-      console.log(req.body);
-      await Product.create({
+      const { name, price, quantity, description } = req.body;
+      if(!quantity) {
+        return { message: "Quantity is required", code: 400 };
+      }
+      const product = await Product.create({
         name: name,
         price: price,
+        description: description,
       });
-      return { message: "Product created successfully", code: 201 };
+      await StockChange.create({
+        quantity: quantity,
+        quantity_at_time: quantity,
+        date: new Date(),
+        productId: product.id,
+      });
+      return { message: "Product created successfully", code: 201, product: product };
     } catch (error) {
       return { message: error, code: 500 };
     }

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User.model.ts";
+import { User } from "../models/index.ts";
 import { Request } from "express";
 import dotenv from "dotenv";
 dotenv.config();
