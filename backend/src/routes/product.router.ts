@@ -20,8 +20,8 @@ export class ProductRouter {
 
     // define the home page route
     this.router.get("/", isAuthorized ,async (req, res) => {
-      const { products, code } = await this.productController.getProducts();
-      res.status(code).json({ products: products });
+      const { message, code } = await this.productController.getProducts();
+      res.status(code).json({ products: message });
     });
 
     this.router.post("/", isAuthorized, async (req, res) => {

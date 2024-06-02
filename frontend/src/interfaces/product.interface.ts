@@ -5,4 +5,5 @@ export interface ProductInterface {
     price: number;
     quantity?: number;
     deleted?: boolean;
+    quantity_at_time?: number;
 }

@@ -6,6 +6,7 @@ class Product extends Model {
   declare public name: string;
   declare public price: number;
   declare public description: string;
+  declare public stock_changes: Array<{ quantity_at_time: number }>;
 }
 
 Product.init(

@@ -43,6 +43,7 @@ export const ProductList = () => {
 
   const setProductsHandler = async () => {
     const data = await productService.getAll();
+    console.log(data);
     setProducts(data);
     setUntouchedProducts(data);
   };
@@ -101,7 +102,7 @@ export const ProductList = () => {
                 key={product.id}
                 product={product}
                 editCallback={() => editCallback(product)}
-                deleteCallback={() => deleteCallback(product.id)}
+                deleteCallback={() => deleteCallback(product.id!)}
               />
             ))}
           </TableBody>

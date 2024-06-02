@@ -3,7 +3,6 @@ import TableRow from "@mui/material/TableRow";
 import { ProductInterface } from "../../../interfaces/product.interface.ts";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./product.scss";
-import { DatabaseService } from "../../../services/database.service.ts";
 
 interface ProductRowProps {
   product: ProductInterface;
@@ -16,10 +15,7 @@ export const ProductRow = ({
   editCallback,
   deleteCallback,
 }: ProductRowProps) => {
-  const getCurrentQuantity = (): number => {
-    const databaseService = new DatabaseService();
-    return databaseService.getProductQuantity(product.id) || 0;
-  };
+
 
   return (
     <TableRow
@@ -31,7 +27,7 @@ export const ProductRow = ({
         {product.name}
       </TableCell>
       <TableCell align="center">{product.price}</TableCell>
-      <TableCell align="center">{getCurrentQuantity()}</TableCell>
+      <TableCell align="center">{product.quantity_at_time}</TableCell>
       <TableCell align="center">
         <div onClick={deleteCallback}>
           <DeleteIcon className="deleteIcon"></DeleteIcon>
