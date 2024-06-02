@@ -43,7 +43,6 @@ export class ProductController {
       await StockChange.create({
         quantity: quantity,
         quantity_at_time: quantity,
-        date: new Date(),
         productId: product.id,
       });
       return {
@@ -51,6 +50,46 @@ export class ProductController {
         code: 201,
         product: product,
       };
+    } catch (error) {
+      return { message: error, code: 500 };
+    }
+  }
+
+  public async updateProduct(id: number|string, req: any) {
+    try {
+      const { name, price, quantity, description } = req.body;
+      const product = await Product.findByPk(id);
+      if (!product) {
+        return { message: "Product not found", code: 404 };
+      }
+      product.name = name;
+      product.price = price;
+      product.description = description;
+      await product.save();
+      const latestStock = await StockChange.findOne( { where: { productId: id }, order: [["id", "DESC"]], limit: 1 } );
+      await StockChange.create({
+        quantity: quantity - latestStock!.quantity_at_time,
+        quantity_at_time: quantity,
+        productId: product.id,
+      });
+      return {
+        message: "Product updated successfully",
+        code: 200,
+        product: product,
+      };
+    } catch (error) {
+      return { message: error, code: 500 };
+    }
+  }
+
+  public async deleteProduct(id: number|string) {
+    try {
+      const product = await Product.findByPk(id);
+      if (!product) {
+        return { message: "Product not found", code: 404 };
+      }
+      await product.destroy();
+      return { message: "Product deleted successfully", code: 200 };
     } catch (error) {
       return { message: error, code: 500 };
     }

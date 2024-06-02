@@ -29,5 +29,17 @@ export class ProductRouter {
       res.status(code).json({ message: message });
     });
 
+    this.router.put("/:id", isAuthorized, async (req, res) => {
+      const { id } = req.params;
+      const { message, code } = await this.productController.updateProduct(id, req);
+      res.status(code).json({ message: message });
+    });
+
+    this.router.delete("/:id", isAuthorized, async (req, res) => {
+      const { id } = req.params;
+      const { message, code } = await this.productController.deleteProduct(id);
+      res.status(code).json({ message: message });
+    });
+
   }
 }

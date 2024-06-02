@@ -64,12 +64,16 @@ export class ProductService {
       }
       throw new Error("An error occurred");
     });
-    console.log(response, 'response');
+    return response.products;
   }
 
   async delete(id: number) {
     const response = await fetch(environment.baseUrl + "products/" + id, {
       method: "DELETE",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTY3NDIwMDV9.D-s80VpPpj7r4KOCd4RMwFPWXDioOMd9yNf0gDTaQVU",
+      },
     });
     return response.json();
   }

@@ -8,7 +8,6 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import { ProductInterface } from "../../../interfaces/product.interface.ts";
 import { useEffect, useState } from "react";
-import { DatabaseService } from "../../../services/database.service.ts";
 import { NewProductModal } from "./NewProductModal.tsx";
 import { PageService } from "../../../services/page.service.ts";
 import { ProductSearchInput } from "./ProductSearchInput.tsx";
@@ -23,7 +22,9 @@ export const ProductList = () => {
   const [searchPrice, setSearchPrice] = useState<string>("");
   const productService = new ProductService();
 
-  const editCallback = (product: ProductInterface) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const editCallback = (product: ProductInterface, event: any) => {
+    if(event.target.id === "delete" || event?.target?.nodeName === 'path') return;
     setOpenEdit(true);
     setEditProduct(product);
   };
@@ -34,11 +35,10 @@ export const ProductList = () => {
     }
   }, [openEdit]);
 
-  const deleteCallback = (productId: number) => {
-    const databaseService = new DatabaseService();
-    databaseService.deleteProduct(productId);
+  const deleteCallback = async (productId: number) => {
+    await productService.delete(productId);
+    setProductsHandler();
     PageService.flashSuccessMessage("Product deleted successfully");
-    setProducts(databaseService.getNotDeletedProducts());
   };
 
   const setProductsHandler = async () => {
@@ -101,7 +101,7 @@ export const ProductList = () => {
               <ProductRow
                 key={product.id}
                 product={product}
-                editCallback={() => editCallback(product)}
+                editCallback={(product, event) => editCallback(product, event)}
                 deleteCallback={() => deleteCallback(product.id!)}
               />
             ))}

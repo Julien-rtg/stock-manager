@@ -6,7 +6,8 @@ import "./product.scss";
 
 interface ProductRowProps {
   product: ProductInterface;
-  editCallback: (product: ProductInterface) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  editCallback: (product: ProductInterface, event: any) => void;
   deleteCallback: () => void;
 }
 
@@ -15,11 +16,10 @@ export const ProductRow = ({
   editCallback,
   deleteCallback,
 }: ProductRowProps) => {
-
-
   return (
     <TableRow
-      onClick={() => editCallback(product)}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onClick={(event) => editCallback(product, event)}
       key={product.id}
       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
     >
@@ -28,10 +28,12 @@ export const ProductRow = ({
       </TableCell>
       <TableCell align="center">{product.price}</TableCell>
       <TableCell align="center">{product.quantity_at_time}</TableCell>
-      <TableCell align="center">
-        <div onClick={deleteCallback}>
-          <DeleteIcon className="deleteIcon"></DeleteIcon>
-        </div>
+      <TableCell align="center" id="delete">
+        <DeleteIcon
+          id="delete"
+          className="deleteIcon"
+          onClick={deleteCallback}
+        ></DeleteIcon>
       </TableCell>
     </TableRow>
   );

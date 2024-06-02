@@ -77,12 +77,12 @@ export const NewProductModal = ({
 
     if (product) {
       const entry: ProductInterface = {
-        id: product.id,
         name: name,
         price: parseInt(price),
+        quantity: parseInt(stock),
         description: description,
       };
-      console.log(entry);
+      await productService.update(product.id!, entry);
       PageService.flashSuccessMessage("Product edited successfully");
     } else {
       const entry: ProductInterface = {
@@ -107,6 +107,8 @@ export const NewProductModal = ({
     if (product) {
       setName(product.name);
       setPrice(product.price.toString());
+      setStock(product!.quantity_at_time!.toString());
+      setDescription(product.description);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openEdit]);
@@ -133,7 +135,7 @@ export const NewProductModal = ({
             <InputLabel htmlFor="price">Price</InputLabel>
             <Input
               id="price"
-              type="text"
+              type="number"
               value={price}
               onChange={handleChange}
             />
@@ -143,7 +145,7 @@ export const NewProductModal = ({
             <InputLabel htmlFor="stock">Stock</InputLabel>
             <Input
               id="stock"
-              type="text"
+              type="number"
               value={stock}
               onChange={handleChange}
             />
