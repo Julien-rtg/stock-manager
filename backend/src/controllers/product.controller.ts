@@ -88,6 +88,7 @@ export class ProductController {
       if (!product) {
         return { message: "Product not found", code: 404 };
       }
+      await StockChange.destroy({ where: { productId: product.id } });
       await product.destroy();
       return { message: "Product deleted successfully", code: 200 };
     } catch (error) {
