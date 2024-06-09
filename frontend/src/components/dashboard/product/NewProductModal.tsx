@@ -23,10 +23,12 @@ const style = {
 
 export const NewProductModal = ({
   callback,
+  resetEditProduct,
   openEdit,
   product,
 }: {
   callback: () => void;
+  resetEditProduct: () => void;
   openEdit: boolean;
   product?: ProductInterface;
 }) => {
@@ -37,15 +39,22 @@ export const NewProductModal = ({
   const [stock, setStock] = useState("");
   const [open, setOpen] = React.useState(false);
 
-  const switchModal = () => setOpen(!open);
-  const resetModal = () => {
-    setName("");
-    setPrice("");
-    setStock("");
-    setDescription("");
+  const switchModal = () => {
+    setOpen(!open)
+    resetEditProduct();
+    resetModal();
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const resetModal = () => {
+    setName("");
+    setDescription("");
+    setPrice("");
+    setStock("");
+  }
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     switch (event.target.id) {
       case "name":
         setName(event.target.value);
@@ -97,12 +106,11 @@ export const NewProductModal = ({
 
     callback();
     switchModal();
-    resetModal();
   };
 
   useEffect(() => {
     if (openEdit) {
-      switchModal();
+      setOpen(true);
     }
     if (product) {
       setName(product.name);

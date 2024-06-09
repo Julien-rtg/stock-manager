@@ -64,16 +64,19 @@ export const ProductList = () => {
 
   useEffect(() => {
     applyFilters();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchName, searchPrice]);
 
   useEffect(() => {
     setProductsHandler();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
       <NewProductModal
         callback={setProductsHandler}
+        resetEditProduct={() => setEditProduct(undefined)}
         openEdit={openEdit}
         product={editProduct}
       ></NewProductModal>
