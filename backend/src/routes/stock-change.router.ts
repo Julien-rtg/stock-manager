@@ -21,8 +21,12 @@ export class StockChangeRouter {
 
     // define the home page route
     this.router.get("/", isAuthorized, async (req, res) => {
+      const page = req.query.page;
+      const offset = page ? +page * 10 : 0;
+      const limit = req.query.rows ? +req.query.rows : 10;
+      console.log(req.query);
       const { message, code } =
-        await this.stockChangeController.getStockChanges();
+        await this.stockChangeController.getStockChanges(offset, limit);
       res.status(code).json({ stock: message });
     });
   }

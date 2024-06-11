@@ -1,7 +1,9 @@
 export interface StocksChangeInterface {
     id: number;
-    product_id: number;
+    productId: number;
     quantity: number;
     quantity_at_time?: number;
-    date: string;
+    createdAt: string;
+    updatedAt: string;
+    formatedDate?: string;
 }

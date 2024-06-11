@@ -24,7 +24,7 @@ function StockRow({stock}: StockRowProps) {
       </TableCell>
       <TableCell align="center">{stock.quantity}</TableCell>
       <TableCell align="center">{stock.quantity_at_time}</TableCell>
-      <TableCell align="center">{stock.date}</TableCell>
+      <TableCell align="center">{stock.formatedDate}</TableCell>
     </TableRow>
   )
 }
