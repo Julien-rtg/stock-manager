@@ -10,38 +10,22 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import {useEffect, useState} from "react";
 import {OrderInterface} from "../../../interfaces/order.interface.ts";
-import {ProductInterface} from "../../../interfaces/product.interface.ts";
-import {DatabaseService} from "../../../services/database.service.ts";
-
-export interface OrderWithNameInterface extends OrderInterface {
-  name: string;
-}
+import { OrderService } from "../../../services/api/order.service.ts";
 
 function OrderList() {
   const [orders, setOrders] = useState<OrderInterface[]>([]);
-  const [ordersDisplay, setOrderDisplay] = useState<OrderWithNameInterface[]>([]);
-  const [products, setProducts] = useState<ProductInterface[]>([]);
+  const orderService = new OrderService();
 
-  const setOrdersAndProducts = () => {
-    const databaseService = new DatabaseService();
-    setOrders(databaseService.db.orders);
-    setProducts(databaseService.db.products);
+  const setOrdersAndProducts = async () => {
+    await orderService.getAll().then((data) => {
+      console.log(data);
+      setOrders(data);
+    });
   }
 
   useEffect(() => {
     setOrdersAndProducts();
   }, [])
-
-  useEffect(() => {
-    const orderToDisplay: OrderWithNameInterface[] = orders.map((order: OrderInterface) => {
-      const productName = products.find((product: ProductInterface) => product.id === order.product_id
-      )?.name || "Undefined name";
-
-      return {...order, name: productName};
-    });
-
-    setOrderDisplay(orderToDisplay);
-  }, [orders, products]);
 
   return (
     <div>
@@ -51,14 +35,13 @@ function OrderList() {
         <Table sx={{minWidth: 650}} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Quantity Ordered</TableCell>
+              <TableCell align="center">Products</TableCell>
               <TableCell align="center">Price</TableCell>
               <TableCell align="center">Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {ordersDisplay.map((row: OrderWithNameInterface) => (
+            {orders.map((row: OrderInterface) => (
               <Order key={row.id} order={row}/>
             ))}
           </TableBody>

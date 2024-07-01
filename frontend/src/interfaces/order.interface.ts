@@ -1,8 +1,9 @@
+import { ProductInterface } from "./product.interface";
+
 export interface OrderInterface {
     id: number;
-    product_id: number;
-    quantity_ordered: number;
-    price: number;
-    date: string;
-    name?: string;
+    total_price: number;
+    createdAt?: string;
+    updatedAt?: string;
+    products: ProductInterface[];
 }

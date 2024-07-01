@@ -21,8 +21,8 @@ export class OrderRouter {
 
     // define the home page route
     this.router.get("/", isAuthorized ,async (req, res) => {
-      const { message, code } = await this.orderController.getProducts();
-      res.status(code).json({ products: message });
+      const { message, code } = await this.orderController.getOrders();
+      res.status(code).json({ message: message });
     });
 
     this.router.post("/", isAuthorized, async (req, res) => {
